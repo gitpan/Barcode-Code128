@@ -2,28 +2,42 @@ README for Barcode::Code128 - Generate CODE 128 bar codes
 
 DESCRIPTION:
     Barcode::Code128 generates bar codes using the CODE 128 symbology.
-    The typical use this is for generating a PNG file with the `png()'
-    method which uses the GD package by Lincoln Stein.  When this PNG
-    file is printed, it can be scanned by most modern hand-held bar
-    code readers.  The application which drove the invention of this
-    module places the PNG file on a web page which the user must print
-    out and submit along with supporting documents.  The bar code
-    helps the receiving agency record when it has been received.
+    It can generate images in PNG or GIF format using the GD package,
+    or it can generate a text string representing the barcode that you
+    can render using some other technology if desired.
 
-    NOTE: Earlier versions of this module generated GIF files instead
-    of PNG files.  This has been changed due to a change in the GD
-    module.  The reason for this is the patent dispute over the form
-    of compression used in GIF files.  Version 1.20 or newer of GD.pm
-    is required to work with this.  If you have earlier versions of
-    GD.pm then you must install version 1.01 of Barcode::Code128 to
-    match.
+    The intended use of this module is to create a web page with a bar
+    code on it, which can then be printed out and faxed or mailed to
+    someone who will scan the bar code.  The application which spurred
+    its creation was an expense report tool, where the employee
+    submitting the report would print out the web page and staple the
+    receipts to it, and the Accounts Payable clerk would scan the bar
+    code to indicate that the receipts were received.
 
-    Since the GD module is required you will need to install it before
-    installing this module.  You can obtain it from the CPAN
-    (Comprehensive Perl Archive Network) repository of your choice
-    under the directory `authors/id/LDS'.  Visit http://www.perl.com/
-    for more information about CPAN.  The GD home page is:
-    http://stein.cshl.org/WWW/software/GD/GD.html
+    The default settings for this module produce a large image that
+    can safely be FAXed several times and still scanned easily.  If
+    this requirement is not important you can generate smaller image
+    using optional parameters.
+
+    If you wish to generate images with this module you must also have
+    the GD.pm module (written by Lincoln Stein, and available from
+    CPAN) installed.  Version 1.20 or higher of GD generates a PNG
+    file, due to issues with the GIF patent.  If you want to create a
+    GIF, you must use version 1.19 or earlier of GD.  However, most
+    browsers have no trouble with PNG files.
+
+    If the GD module is not present, you can still use the module, but
+    you will not be able to use its functions for generating images.
+    You can use the barcode() method to get a string of "#" and " "
+    (hash and space) characters, and use your own image-generating
+    routine with that as input.
+
+    To use the the GD module, you will need to install it along with
+    this module.  You can obtain it from the CPAN (Comprehensive Perl
+    Archive Network) repository of your choice under the directory
+    "authors/id/LDS".  Visit http://www.cpan.org/ for more information
+    about CPAN.  The GD home page is:
+	    http://stein.cshl.org/WWW/software/GD/GD.html
 
 EXAMPLE:
     use Barcode::Code128;
@@ -42,6 +56,12 @@ TERMS: This module is placed into the public domain.  You are free to
     modified version of this module unless you change the name first.
 
 HISTORY:
+    Version 2.0, 5/28/2001 - Generate either PNG or GIF, or neither,
+	    depending on what version of GD is installed; lots of
+	    optional parameters added; minor bug fixes
+
+    Version 1.11, 10/29/1999 - Fix bug in test script
+
     Version 1.10, 10/26/1999 - Generate PNG instead of GIF files
 
     Version 1.01, 7/19/1999 - Bug fix to deal with inputs ending in zero
