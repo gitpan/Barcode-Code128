@@ -2,13 +2,21 @@ README for Barcode::Code128 - Generate CODE 128 bar codes
 
 DESCRIPTION:
     Barcode::Code128 generates bar codes using the CODE 128 symbology.
-    The typical use this is for generating a GIF file with the `gif()'
-    method which uses the GD package by Lincoln Stein.  When this GIF
+    The typical use this is for generating a PNG file with the `png()'
+    method which uses the GD package by Lincoln Stein.  When this PNG
     file is printed, it can be scanned by most modern hand-held bar
     code readers.  The application which drove the invention of this
-    module places the GIF file on a web page which the user must print
+    module places the PNG file on a web page which the user must print
     out and submit along with supporting documents.  The bar code
     helps the receiving agency record when it has been received.
+
+    NOTE: Earlier versions of this module generated GIF files instead
+    of PNG files.  This has been changed due to a change in the GD
+    module.  The reason for this is the patent dispute over the form
+    of compression used in GIF files.  Version 1.20 or newer of GD.pm
+    is required to work with this.  If you have earlier versions of
+    GD.pm then you must install version 1.01 of Barcode::Code128 to
+    match.
 
     Since the GD module is required you will need to install it before
     installing this module.  You can obtain it from the CPAN
@@ -20,8 +28,8 @@ DESCRIPTION:
 EXAMPLE:
     use Barcode::Code128;
     $object = new Barcode::Code128;
-    print "Content-Type: image/gif\n\n";
-    $object->gif('CODE 128');
+    print "Content-Type: image/png\n\n";
+    $object->png('CODE 128');
 
 AUTHOR: William R. Ward, wrw@bayview.com
 
@@ -34,6 +42,8 @@ TERMS: This module is placed into the public domain.  You are free to
     modified version of this module unless you change the name first.
 
 HISTORY:
+    Version 1.10, 10/26/1999 - Generate PNG instead of GIF files
+
     Version 1.01, 7/19/1999 - Bug fix to deal with inputs ending in zero
 
     Version 1.00, 3/8/1999 - Initial version.

@@ -22,12 +22,13 @@ print "not " unless $encoded eq
 print "ok 2\n";
 my $good;
 {
-    open IM, "t/code128.gif" or die "Can't read t/code128.gif: $!";
+    open IM, ">t/code128.png" or die "Can't read t/code128.png: $!";
     binmode IM;
+    print IM $code->png("CODE 128");
     local($/) = undef;
     $good = <IM>;
     close IM;
 }
-my $test = $code->gif("CODE 128");
+my $test = $code->png("CODE 128");
 print "not " unless $test eq $good;
 print "ok 3\n";

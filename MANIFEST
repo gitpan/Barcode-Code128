@@ -4,4 +4,4 @@ Makefile.PL
 README
 lib/Barcode/Code128.pm
 t/1.t
-t/code128.gif
+t/code128.png

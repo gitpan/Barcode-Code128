@@ -50,11 +50,11 @@ inserted automatically as needed by this module.
 =head1 DESCRIPTION
 
 Barcode::Code128 generates bar codes using the CODE 128 symbology.
-The typical use this is for generating a GIF file with the C<gif()>
-method which uses the GD package by Lincoln Stein.  When this GIF file
+The typical use this is for generating a PNG file with the C<png()>
+method which uses the GD package by Lincoln Stein.  When this PNG file
 is printed, it can be scanned by most modern hand-held bar code
 readers.  The application which drove the invention of this module
-places the GIF file on a web page which the user must print out and
+places the PNG file on a web page which the user must print out and
 submit along with supporting documents.  The bar code helps the
 receiving agency record when it has been received.
 
@@ -101,7 +101,7 @@ use GD;
 @ISA = qw(Exporter);
 
 # Version information
-$VERSION = '1.01';
+$VERSION = '1.10';
 
 @ENCODING = qw(11011001100 11001101100 11001100110 10010011000
 	       10010001100 10001001100 10011001000 10011000100
@@ -184,26 +184,26 @@ sub new
 
 ##----------------------------------------------------------------------------
 
-=item $object->gif($text)
+=item $object->png($text)
 
-=item $object->gif($text, $x, $y)
+=item $object->png($text, $x, $y)
 
-Generate a GIF file and return it.  Typically you will either print
+Generate a PNG file and return it.  Typically you will either print
 the result to standard output or save it to a file.  The contents of
 the return value from this method are a binary file, so if you are
 working on an operating system that makes a distinction between text
 and binary files be sure to call binmode(FILEHANDLE) before writing
-the GIF to it.  Example:
+the PNG to it.  Example:
 
-  open(GIF, ">code128.gif") or die "Can't write code128.gif: $!\n";
-  binmode(GIF);
-  print GIF $object->gif("CODE 128");
-  close(GIF);
+  open(PNG, ">code128.png") or die "Can't write code128.png: $!\n";
+  binmode(PNG);
+  print PNG $object->png("CODE 128");
+  close(PNG);
 
 Note: All of the arguments to this function are optional.  If you have
 previously specified C<$text> to the C<barcode()>, C<encode()>, or
 C<text()> methods, you do not need to specify it again.  The C<$x> and
-C<$y> variables specify the size of the barcode within GIF file in
+C<$y> variables specify the size of the barcode within PNG file in
 pixels.  The overall image will be an extra 20 pixels taller to
 accomodate the plaintext rendering of the encoded message (in black on
 a transparent background).  If size(s) are not specified, they will be
@@ -212,7 +212,7 @@ pixels horizontally, and 15% of the length of the barcode vertically.
 
 =cut
 
-sub gif
+sub png
 {
     my($self, $text, $x, $y) = @_;
     my @barcode = split //, $self->barcode($text);
@@ -224,7 +224,7 @@ sub gif
     croak "Image width $x is too small for bar code"  if $x < $min_x;
     croak "Image height $y is too small for bar code" if $y < $min_y;
     my $image = new GD::Image($x, $y+20) or
-	croak "Unable to create $x x $y GIF image";
+	croak "Unable to create $x x $y PNG image";
     my $grey  = $image->colorAllocate(0xCC, 0xCC, 0xCC);
     my $white = $image->colorAllocate(0xFF, 0xFF, 0xFF);
     my $black = $image->colorAllocate(0x00, 0x00, 0x00);
@@ -241,7 +241,7 @@ sub gif
     }
     my $encoded = $self->{encoded};
     $image->string(gdLargeFont, 2, $y+2, $self->{text}, $black);
-    return $image->gif();
+    return $image->png();
 }
 
 ##----------------------------------------------------------------------------
@@ -251,7 +251,7 @@ sub gif
 Computes the bar code for the specified text.  The result will be a
 string of '#' and space characters representing the dark and light
 bands of the bar code.  You can use this if you have an alternate
-printing system besides the C<gif()> method.
+printing system besides the C<png()> method.
 
 Note: The C<$text> parameter is optional. If you have previously
 specified C<$text> to the C<encode()> or C<text()> methods, you do not
@@ -465,16 +465,16 @@ None.
 You have specified an image width that does not allow enough space for
 the bar code to be displayed.  The minimum allowable is the size of
 the bar code itself plus 40 pixels.  If in doubt, just omit the width
-value when calling C<gif()> and it will use the minimum.
+value when calling C<png()> and it will use the minimum.
 
 =item Image height $y is too small for bar code
 
 You have specified an image height that does not allow enough space
 for the bar code to be displayed.  The minimum allowable is 15% of the
 width of the bar code.  If in doubt, just omit the height value when
-calling C<gif()> and it will use the minimum.
+calling C<png()> and it will use the minimum.
 
-=item Unable to create $x x $y GIF image
+=item Unable to create $x x $y PNG image
 
 An error occurred when initializing a GD::Image object for the
 specified size.  Perhaps C<$x> and C<$y> are too large for memory?
@@ -524,6 +524,12 @@ argument was supplied.  Only the codes (A, B, or C) of CODE 128 may be
 supplied here.  If you get this error please contact the author.
 
 =back
+
+=head1 BUGS
+
+At least some Web browsers do not seem to handle PNG files with
+transparent backgrounds correctly.  As a result your barcodes may have
+a grey background behind the text version of the message.
 
 =head1 AUTHOR
 
