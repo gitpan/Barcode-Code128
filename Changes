@@ -1,5 +1,7 @@
 Revision history for Perl extension Barcode::Code128.
 
-0.01  Fri Mar  5 18:43:06 1999
+1.00  Fri Mar  5 18:43:06 1999
 	- original version; created by h2xs 1.18
 
+1.01  Mon Jul 19 03:06:31 1999
+	- Apply bugfix to fix problems where input ends in zeroes

@@ -101,7 +101,7 @@ use GD;
 @ISA = qw(Exporter);
 
 # Version information
-$VERSION = '1.00';
+$VERSION = '1.01';
 
 @ENCODING = qw(11011001100 11001101100 11001100110 10010011000
 	       10010001100 10001001100 10011001000 10011000100
@@ -437,7 +437,8 @@ sub _encodable
     {
 	my $old = $string;
 	push @chars, $1 while($code eq 'C' && $string =~ s/^(\d\d)//);
-	while(my $char = substr($string, 0, 1))
+	my $char;
+	while(defined($char = substr($string, 0, 1)))
 	{
 	    last if $code ne 'C' && $string =~ /^\d\d\d/;
 	    last unless exists $CODE{$code}{$char};
