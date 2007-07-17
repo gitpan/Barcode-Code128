@@ -24,3 +24,7 @@ Revision history for Perl extension Barcode::Code128.
 	- Update diagnostics section to match same sequence they appear in code
 	- Add font_align option (courtesy Gavin Brock <gavin.brock@nssmb.com>)
 	- Add transparent_text option
+
+2.01  Tue Jul 17 13:07:04 PDT 2007
+	- Change AUTOLOAD to not try to call destroy()
+	  As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=14850

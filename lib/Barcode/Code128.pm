@@ -7,7 +7,7 @@ Barcode::Code128 - Generate CODE 128 bar codes
 =head1 SYNOPSIS
 
   use Barcode::Code128;
-  
+
   $code = new Barcode::Code128;
 
 =head1 REQUIRES
@@ -98,7 +98,7 @@ package Barcode::Code128;
 use strict;
 
 use vars qw($GD_TYPE $VERSION %CODE_CHARS %CODE @ENCODING @EXPORT_OK
-	    %EXPORT_TAGS %FUNC_CHARS @ISA %OPTIONS);
+            %EXPORT_TAGS %FUNC_CHARS @ISA %OPTIONS);
 
 use constant CodeA  => chr(0xf4);
 use constant CodeB  => chr(0xf5);
@@ -121,7 +121,7 @@ BEGIN {
     $GD_TYPE = undef;
     eval { require GD && GD->import() };
     $GD_TYPE = ($GD::VERSION > 1.20 ? 'png' : 'gif')
-	unless $@;
+        unless $@;
 }
 
 %OPTIONS =
@@ -143,74 +143,74 @@ BEGIN {
     );
 
 @EXPORT_OK = qw(CodeA CodeB CodeC FNC1 FNC2 FNC3 FNC4 Shift StartA
-		StartB StartC Stop);
+                StartB StartC Stop);
 %EXPORT_TAGS = (all => \@EXPORT_OK);
 @ISA = qw(Exporter);
 
 # Version information
-$VERSION = '2.00';
+$VERSION = '2.01';
 
 @ENCODING = qw(11011001100 11001101100 11001100110 10010011000
-	       10010001100 10001001100 10011001000 10011000100
-	       10001100100 11001001000 11001000100 11000100100
-	       10110011100 10011011100 10011001110 10111001100
-	       
-	       10011101100 10011100110 11001110010 11001011100
-	       11001001110 11011100100 11001110100 11101101110
-	       11101001100 11100101100 11100100110 11101100100
-	       11100110100 11100110010 11011011000 11011000110
-	       
-	       11000110110 10100011000 10001011000 10001000110
-	       10110001000 10001101000 10001100010 11010001000
-	       11000101000 11000100010 10110111000 10110001110
-	       10001101110 10111011000 10111000110 10001110110
-	       
-	       11101110110 11010001110 11000101110 11011101000
-	       11011100010 11011101110 11101011000 11101000110
-	       11100010110 11101101000 11101100010 11100011010
-	       11101111010 11001000010 11110001010 10100110000
-	       
-	       10100001100 10010110000 10010000110 10000101100
-	       10000100110 10110010000 10110000100 10011010000
-	       10011000010 10000110100 10000110010 11000010010
-	       11001010000 11110111010 11000010100 10001111010
-	       
-	       10100111100 10010111100 10010011110 10111100100
-	       10011110100 10011110010 11110100100 11110010100
-	       11110010010 11011011110 11011110110 11110110110
-	       10101111000 10100011110 10001011110 10111101000
-	       
-	       10111100010 11110101000 11110100010 10111011110
-	       10111101110 11101011110 11110101110 11010000100
-	       11010010000 11010011100 1100011101011);
+               10010001100 10001001100 10011001000 10011000100
+               10001100100 11001001000 11001000100 11000100100
+               10110011100 10011011100 10011001110 10111001100
+
+               10011101100 10011100110 11001110010 11001011100
+               11001001110 11011100100 11001110100 11101101110
+               11101001100 11100101100 11100100110 11101100100
+               11100110100 11100110010 11011011000 11011000110
+
+               11000110110 10100011000 10001011000 10001000110
+               10110001000 10001101000 10001100010 11010001000
+               11000101000 11000100010 10110111000 10110001110
+               10001101110 10111011000 10111000110 10001110110
+
+               11101110110 11010001110 11000101110 11011101000
+               11011100010 11011101110 11101011000 11101000110
+               11100010110 11101101000 11101100010 11100011010
+               11101111010 11001000010 11110001010 10100110000
+
+               10100001100 10010110000 10010000110 10000101100
+               10000100110 10110010000 10110000100 10011010000
+               10011000010 10000110100 10000110010 11000010010
+               11001010000 11110111010 11000010100 10001111010
+
+               10100111100 10010111100 10010011110 10111100100
+               10011110100 10011110010 11110100100 11110010100
+               11110010010 11011011110 11011110110 11110110110
+               10101111000 10100011110 10001011110 10111101000
+
+               10111100010 11110101000 11110100010 10111011110
+               10111101110 11101011110 11110101110 11010000100
+               11010010000 11010011100 1100011101011);
 
 %CODE_CHARS = ( A => [ (map { chr($_) } 040..0137, 000..037),
-		       FNC3, FNC2, Shift, CodeC, CodeB, FNC4, FNC1,
-		       StartA, StartB, StartC, Stop ],
-		B => [ (map { chr($_) } 040..0177),
-		       FNC3, FNC2, Shift, CodeC, FNC4, CodeA, FNC1,
-		       StartA, StartB, StartC, Stop ],
-		C => [ ("00".."99"),
-		       CodeB, CodeA, FNC1, StartA, StartB, StartC, Stop ]);
+                       FNC3, FNC2, Shift, CodeC, CodeB, FNC4, FNC1,
+                       StartA, StartB, StartC, Stop ],
+                B => [ (map { chr($_) } 040..0177),
+                       FNC3, FNC2, Shift, CodeC, FNC4, CodeA, FNC1,
+                       StartA, StartB, StartC, Stop ],
+                C => [ ("00".."99"),
+                       CodeB, CodeA, FNC1, StartA, StartB, StartC, Stop ]);
 
 # Provide string equivalents to the constants
-%FUNC_CHARS = ('CodeA'	=> CodeA,
-	       'CodeB'	=> CodeB,
-	       'CodeC'	=> CodeC,
-	       'FNC1'	=> FNC1,
-	       'FNC2'	=> FNC2,
-	       'FNC3'	=> FNC3,
-	       'FNC4'	=> FNC4,
-	       'Shift'	=> Shift,
-	       'StartA'	=> StartA,
-	       'StartB'	=> StartB,
-	       'StartC'	=> StartC,
-	       'Stop'	=> Stop );
+%FUNC_CHARS = ('CodeA'  => CodeA,
+               'CodeB'  => CodeB,
+               'CodeC'  => CodeC,
+               'FNC1'   => FNC1,
+               'FNC2'   => FNC2,
+               'FNC3'   => FNC3,
+               'FNC4'   => FNC4,
+               'Shift'  => Shift,
+               'StartA' => StartA,
+               'StartB' => StartB,
+               'StartC' => StartC,
+               'Stop'   => Stop );
 
 # Convert the above into a 2-dimensional hash
 %CODE = ( A => { map { $CODE_CHARS{A}[$_] => $_ } 0..106 },
-	  B => { map { $CODE_CHARS{B}[$_] => $_ } 0..106 },
-	  C => { map { $CODE_CHARS{C}[$_] => $_ } 0..106 } );
+          B => { map { $CODE_CHARS{B}[$_] => $_ } 0..106 },
+          C => { map { $CODE_CHARS{C}[$_] => $_ } 0..106 } );
 
 ##----------------------------------------------------------------------------
 
@@ -286,48 +286,49 @@ sub AUTOLOAD
     my($self, @args) = @_;
     use vars qw($AUTOLOAD);
     (my $opt = lc $AUTOLOAD) =~ s/^.*:://;
+    return if $opt eq 'destroy';
     $self->option($opt, @args);
 }
 
 sub option
 {
     my $self = shift;
-    my $class = ref $self;	# do this so others can inherit from us
+    my $class = ref $self;      # do this so others can inherit from us
     my $defaults;
     {  no strict 'refs'; $defaults = \%{$class.'::OPTIONS'};  }
 
     if (!@_) {
-	my %all;
-	while (my($opt, $def_value) = each %$defaults) {
-	    if (exists $self->{OPTIONS}{$opt}) {
-		$all{$opt} = $self->{OPTIONS}{$opt};
-	    }
-	    else {
-		$all{$opt} = $def_value;
-	    }
-	}
-	wantarray ? %all : \%all;
+        my %all;
+        while (my($opt, $def_value) = each %$defaults) {
+            if (exists $self->{OPTIONS}{$opt}) {
+                $all{$opt} = $self->{OPTIONS}{$opt};
+            }
+            else {
+                $all{$opt} = $def_value;
+            }
+        }
+        wantarray ? %all : \%all;
     }
-    elsif (@_ == 1) {		# return requested value
-	my $opt = shift;
-	croak "Unrecognized option ($opt) for $class"
-	    unless exists $defaults->{$opt};
-	if (exists $self->{OPTIONS}{$opt}) {
-	    return $self->{OPTIONS}{$opt};
-	}
-	else {
-	    return $defaults->{$opt};
-	}
+    elsif (@_ == 1) {           # return requested value
+        my $opt = shift;
+        croak "Unrecognized option ($opt) for $class"
+            unless exists $defaults->{$opt};
+        if (exists $self->{OPTIONS}{$opt}) {
+            return $self->{OPTIONS}{$opt};
+        }
+        else {
+            return $defaults->{$opt};
+        }
     }
     else {
-	my $count = 0;
-	while(my($opt, $value) = splice(@_, 0, 2)) {
-	    croak "Unrecognized option ($opt) for $class"
-		unless exists $defaults->{$opt};
-	    $self->{OPTIONS}{$opt} = $value;
-	    $count++;
-	}
-	return $count;
+        my $count = 0;
+        while(my($opt, $value) = splice(@_, 0, 2)) {
+            croak "Unrecognized option ($opt) for $class"
+                unless exists $defaults->{$opt};
+            $self->{OPTIONS}{$opt} = $value;
+            $count++;
+        }
+        return $count;
     }
 }
 
@@ -344,11 +345,11 @@ Usage:
     $object->png($text)
     $object->png($text, $x, $y)
     $object->png($text, { options... })
-    
-    $object->gif($text)		# for old versions of GD only
+
+    $object->gif($text)         # for old versions of GD only
     $object->gif($text, $x, $y)
     $object->gif($text, { options... })
-    
+
     $object->gd_image($text)
     $object->gd_image($text, $x, $y)
     $object->gd_image($text, { options... })
@@ -404,26 +405,26 @@ sub gd_image
     my($self, $text, $x, $y) = @_;
     my %opts;
     if (ref($x) && !defined($y)) {
-	%opts = ($self->option, %$x);
-	$x = $opts{width};
-	$y = $opts{height};
+        %opts = ($self->option, %$x);
+        $x = $opts{width};
+        $y = $opts{height};
     }
     else {
-	%opts = $self->option;
-	$opts{width}  = $x if $x;
-	$opts{height} = $y if $y;
+        %opts = $self->option;
+        $opts{width}  = $x if $x;
+        $opts{height} = $y if $y;
     }
 
     croak "The gd_image() method of Barcode::Code128 requires the GD module"
-	unless $GD_TYPE;
+        unless $GD_TYPE;
 
     my $scale = $opts{scale};
     croak "Scale ($scale) must be a positive integer"
-	unless $scale > 0 && int($scale) == $scale;
+        unless $scale > 0 && int($scale) == $scale;
 
     my $border = $opts{border};
     croak "Border ($border) must be a positive integer or zero"
-	unless $border >= 0 && int($border) == $border;
+        unless $border >= 0 && int($border) == $border;
     $border *= $scale;
 
     $x ||= $opts{width};
@@ -431,25 +432,25 @@ sub gd_image
 
     my($font, $font_margin, $font_height, $font_width) = (undef, 0, 0, 0);
     if ($opts{show_text}) {
-	$font = $opts{font};
-	my %fontTable = (giant  => 'gdGiantFont',
-			 large  => 'gdLargeFont',
-			 medium => 'gdMediumBoldFont',
-			 small  => 'gdSmallFont',
-			 tiny   => 'gdTinyFont');
-	$font = $fontTable{$font} if exists $fontTable{$font};
-	croak "Invalid font $font" unless GD->can($font);
-	$font = eval "GD->$font"; die $@ if $@;
-	$font_margin = $opts{font_margin};
-	$font_height = $font->height + $font_margin * 2;
-	$font_width  = $font->width;
+        $font = $opts{font};
+        my %fontTable = (giant  => 'gdGiantFont',
+                         large  => 'gdLargeFont',
+                         medium => 'gdMediumBoldFont',
+                         small  => 'gdSmallFont',
+                         tiny   => 'gdTinyFont');
+        $font = $fontTable{$font} if exists $fontTable{$font};
+        croak "Invalid font $font" unless GD->can($font);
+        $font = eval "GD->$font"; die $@ if $@;
+        $font_margin = $opts{font_margin};
+        $font_height = $font->height + $font_margin * 2;
+        $font_width  = $font->width;
     }
 
     my($lm, $rm, $tm, $bm) = map { $opts{$_."_margin"} }
-	qw(left right top bottom);
+        qw(left right top bottom);
 
     my @barcode = split //, $self->barcode($text);
-    my $n = scalar(@barcode);	# width of string
+    my $n = scalar(@barcode);   # width of string
     my $min_x = ($n + $opts{padding}) * $scale + 2 * $border;
     my $min_y = $n * $scale * 0.15 + 2 * $border; # 15% of width in pixels
     $x ||= $min_x;
@@ -457,43 +458,43 @@ sub gd_image
     croak "Image width $x is too small for bar code"  if $x < $min_x;
     croak "Image height $y is too small for bar code" if $y < $min_y;
     my $image = new GD::Image($x + $lm + $rm, $y + $tm + $bm + $font_height)
-	or croak "Unable to create $x x $y image";
+        or croak "Unable to create $x x $y image";
     my $grey  = $image->colorAllocate(0xCC, 0xCC, 0xCC);
     my $white = $image->colorAllocate(0xFF, 0xFF, 0xFF);
     my $black = $image->colorAllocate(0x00, 0x00, 0x00);
     my $red = $image->colorAllocate(0xFF, 0x00, 0x00);
     $image->transparent($grey)
-	if $opts{transparent_text};
+        if $opts{transparent_text};
     if ($border) {
-	$image->rectangle($lm, $tm, $lm+$x-1, $tm+$y-1, $black);
-	$image->rectangle($lm+$border, $tm+$border,
-			  $lm+$x-$border-1, $tm+$y-$border-1, $black);
-	$image->fill($lm+1, $tm+1, $black);
+        $image->rectangle($lm, $tm, $lm+$x-1, $tm+$y-1, $black);
+        $image->rectangle($lm+$border, $tm+$border,
+                          $lm+$x-$border-1, $tm+$y-$border-1, $black);
+        $image->fill($lm+1, $tm+1, $black);
     }
     else {
-	$image->rectangle($lm, $tm, $lm+$x-1, $tm+$y-1, $white);
+        $image->rectangle($lm, $tm, $lm+$x-1, $tm+$y-1, $white);
     }
     $image->fill($lm+$border+1, $tm+$border+1, $white);
     for (my $i = 0; $i < $n; ++$i)
     {
-	next unless $barcode[$i] eq '#';
-	my $pos = $x/2 - $n * ($scale/2) + $i * $scale;
-	$image->rectangle($lm+$pos, $tm+$border,
-			  $lm+$pos+$scale-1, $tm+$y-$border-1, $black);
-	$image->fill($lm+$pos+1, $tm+$border+1, $black)
-	    if $scale > 2;
+        next unless $barcode[$i] eq '#';
+        my $pos = $x/2 - $n * ($scale/2) + $i * $scale;
+        $image->rectangle($lm+$pos, $tm+$border,
+                          $lm+$pos+$scale-1, $tm+$y-$border-1, $black);
+        $image->fill($lm+$pos+1, $tm+$border+1, $black)
+            if $scale > 2;
     }
     if (defined $font) {
-    	my ($font_x,$font_y);
-    	if ($opts{font_align} eq "center") {
-	    $font_x = int(($x+$lm+$rm-($font_width*length $self->{text}))/2);
-    	} elsif ($opts{font_align} eq "right") {
-	    $font_x = $x +$lm-($font_width * length $self->{text});
-	} else { # Assume left
-	    $font_x = $lm+$font_margin;
-	}
-	$font_y = $tm+$y+$font_margin;
-    	$image->string($font, $font_x, $font_y, $self->{text}, $black)
+        my ($font_x,$font_y);
+        if ($opts{font_align} eq "center") {
+            $font_x = int(($x+$lm+$rm-($font_width*length $self->{text}))/2);
+        } elsif ($opts{font_align} eq "right") {
+            $font_x = $x +$lm-($font_width * length $self->{text});
+        } else { # Assume left
+            $font_x = $lm+$font_margin;
+        }
+        $font_y = $tm+$y+$font_margin;
+        $image->string($font, $font_x, $font_y, $self->{text}, $black)
     }
     return $image;
 }
@@ -502,9 +503,9 @@ sub gif
 {
     my($self, $text, $x, $y, $scale) = @_;
     croak "The gif() method of Barcode::Code128 requires the GD module"
-	unless $GD_TYPE;
+        unless $GD_TYPE;
     croak "The gif() method of Barcode::Code128 requires version less than 1.20 of GD"
-	unless defined  $GD_TYPE && $GD_TYPE eq 'gif';
+        unless defined  $GD_TYPE && $GD_TYPE eq 'gif';
     my $image = $self->gd_image($text, $x, $y, $scale);
     return $image->gif();
 }
@@ -513,9 +514,9 @@ sub png
 {
     my($self, $text, $x, $y, $scale) = @_;
     croak "The png() method of Barcode::Code128 requires the GD module"
-	unless $GD_TYPE;
+        unless $GD_TYPE;
     croak "The png() method of Barcode::Code128 requires at least version 1.20 of GD"
-	unless defined  $GD_TYPE && $GD_TYPE eq 'png';
+        unless defined  $GD_TYPE && $GD_TYPE eq 'png';
     my $image = $self->gd_image($text, $x, $y, $scale);
     return $image->png();
 }
@@ -596,35 +597,35 @@ sub encode
     $self->text($text) if defined $text;
     croak "No text defined" unless defined($text = $self->text);
     croak "Invalid preferred code ``$preferred_code''"
-	if defined $preferred_code && !exists $CODE{$preferred_code};
+        if defined $preferred_code && !exists $CODE{$preferred_code};
     # Reset internal variables
     my $encoded = $self->{encoded} = [];
     $self->{code} = undef;
     my $sanity = 0;
     while(length $text)
     {
-	confess "Sanity Check Overflow" if $sanity++ > 1000;
-	my @chars;
-	if ($preferred_code && (@chars = _encodable($preferred_code, $text)))
-	{
-	    $self->start($preferred_code);
-	    push @$encoded, map { $CODE{$preferred_code}{$_} } @chars;
-	}
-	elsif (@chars = _encodable('C', $text))
-	{
-	    $self->start('C');
-	    push @$encoded, map { $CODE{C}{$_} } @chars;
-	}
-	else
-	{
-	    my %x = map { $_ => [ _encodable($_, $text) ] } qw(A B);
-	    my $code = (@{$x{A}} >= @{$x{B}} ? 'A' : 'B'); # prefer A if equal
-	    $self->start($code);
-	    @chars = @{ $x{$code} };
-	    push @$encoded, map { $CODE{$code}{$_} } @chars;
-	}
-	croak "Unable to find encoding for ``$text''" unless @chars;
-	substr($text, 0, length join '', @chars) = '';
+        confess "Sanity Check Overflow" if $sanity++ > 1000;
+        my @chars;
+        if ($preferred_code && (@chars = _encodable($preferred_code, $text)))
+        {
+            $self->start($preferred_code);
+            push @$encoded, map { $CODE{$preferred_code}{$_} } @chars;
+        }
+        elsif (@chars = _encodable('C', $text))
+        {
+            $self->start('C');
+            push @$encoded, map { $CODE{C}{$_} } @chars;
+        }
+        else
+        {
+            my %x = map { $_ => [ _encodable($_, $text) ] } qw(A B);
+            my $code = (@{$x{A}} >= @{$x{B}} ? 'A' : 'B'); # prefer A if equal
+            $self->start($code);
+            @chars = @{ $x{$code} };
+            push @$encoded, map { $CODE{$code}{$_} } @chars;
+        }
+        croak "Unable to find encoding for ``$text''" unless @chars;
+        substr($text, 0, length join '', @chars) = '';
     }
     $self->stop;
     wantarray ? @$encoded : $encoded;
@@ -672,15 +673,15 @@ sub start
     my $old_code = $self->code;
     if (defined $old_code)
     {
-	my $func = $FUNC_CHARS{"Code$new_code"} or
-	    confess "Unable to switch from ``$old_code'' to ``$new_code''";
-	push @{ $self->{encoded} }, $CODE{$old_code}{$func};
+        my $func = $FUNC_CHARS{"Code$new_code"} or
+            confess "Unable to switch from ``$old_code'' to ``$new_code''";
+        push @{ $self->{encoded} }, $CODE{$old_code}{$func};
     }
     else
     {
-	my $func = $FUNC_CHARS{"Start$new_code"} or
-	    confess "Unable to start with ``$new_code''";
-	@{ $self->{encoded} } = $CODE{$new_code}{$func};
+        my $func = $FUNC_CHARS{"Start$new_code"} or
+            confess "Unable to start with ``$new_code''";
+        @{ $self->{encoded} } = $CODE{$new_code}{$func};
     }
     $self->code($new_code);
 }
@@ -704,7 +705,7 @@ sub stop
     my $sum = $self->{encoded}[0];
     for (my $i = 1; $i < @{ $self->{encoded} }; ++$i)
     {
-	$sum += $i * $self->{encoded}[$i];
+        $sum += $i * $self->{encoded}[$i];
     }
     my $stop = Stop;
     push @{ $self->{encoded} }, ($sum % 103), $CODE{C}{$stop};
@@ -730,10 +731,10 @@ sub code
     my($self, $new_code) = @_;
     if (defined $new_code)
     {
-	$new_code = uc $new_code;
-	croak "Unknown code ``$new_code'' (should be A, B, or C)"
-	    unless $new_code eq 'A' || $new_code eq 'B' || $new_code eq 'C';
-	$self->{code} = $new_code;
+        $new_code = uc $new_code;
+        croak "Unknown code ``$new_code'' (should be A, B, or C)"
+            unless $new_code eq 'A' || $new_code eq 'B' || $new_code eq 'C';
+        $self->{code} = $new_code;
     }
     $self->{code};
 }
@@ -751,17 +752,17 @@ sub _encodable
     my @chars;
     while (length $string)
     {
-	my $old = $string;
-	push @chars, $1 while($code eq 'C' && $string =~ s/^(\d\d)//);
-	my $char;
-	while(defined($char = substr($string, 0, 1)))
-	{
-	    last if $code ne 'C' && $string =~ /^\d\d\d\d\d\d/;
-	    last unless exists $CODE{$code}{$char};
-	    push @chars, $char;
-	    $string =~ s/^\Q$char\E//;
-	}
-	last if $old eq $string; # stop if no more changes made to $string
+        my $old = $string;
+        push @chars, $1 while($code eq 'C' && $string =~ s/^(\d\d)//);
+        my $char;
+        while(defined($char = substr($string, 0, 1)))
+        {
+            last if $code ne 'C' && $string =~ /^\d\d\d\d\d\d/;
+            last unless exists $CODE{$code}{$char};
+            push @chars, $char;
+            $string =~ s/^\Q$char\E//;
+        }
+        last if $old eq $string; # stop if no more changes made to $string
     }
     @chars;
 }
