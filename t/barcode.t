@@ -1,19 +1,21 @@
 # -*- Perl -*-
 
 # Load the module
+use Test::More tests => 3;
+use strict;
 
-BEGIN { $| = 1; print "1..2\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use Barcode::Code128 qw(FNC1);
-$loaded = 1;
-print "ok 1\n";
+BEGIN {
+    $| = 1;
+    use_ok('Barcode::Code128', qw(FNC1));
+}
 
 # Create a test barcode and make sure it is correct
 
-use strict;
-my $code = new Barcode::Code128;
+ok(my $code = Barcode::Code128->new, 'constructor');
+
 my $encoded = $code->barcode("1234 abcd");
-print "not " unless $encoded eq
-    ("## #  ###  # ##  ###  #   # ##   # #### ### ## ##  ##  #  # ##    #".
-     "  #    ## #    # ##  #    #  ## ###   # ## ##   ### # ##");
-print "ok 2\n";
+cmp_ok($encoded, 'eq',
+    "## #  ###  # ##  ###  #   # ##   # #### ### ## ##  ##  #  # ##    #".
+    "  #    ## #    # ##  #    #  ## ###   # ## ##   ### # ##",
+    "'1234 abcd' rendered as expected"
+);

@@ -1,4 +1,4 @@
-require 5.004;
+require 5.010;
 
 =head1 NAME
 
@@ -68,11 +68,20 @@ requirement is not important you can generate smaller image using
 optional parameters, described below.
 
 If you wish to generate images with this module you must also have the
-GD.pm module (written by Lincoln Stein, and available from CPAN)
-installed.  Version 1.20 or higher of GD generates a PNG file, due to
-issues with the GIF patent.  If you want to create a GIF, you must use
-version 1.19 or earlier of GD.  However, most browsers have no trouble
-with PNG files.
+GD module (written by Lincoln Stein, and available from CPAN)
+installed.  Using the libgd library, GD can generate files in PNG
+(Portable Network Graphics) or GIF (Graphic Interchange Format)
+formats.
+
+Starting with version 1.20, and ending with 2.0.28 (released July
+21st, 2004), GD and the underlying libgd library could not generate
+GIF files due to patent issues, but any modern version of libgd (since
+2004) can do GIF as the patent has expired.  Most browsers have no
+trouble with PNG files.
+
+In order to ensure you have a sufficiently modern installation of the
+GD module to do both GIF and PNG formats, we require version 2.18 of
+GD (which in turn requires libgd 2.0.28) or higher.
 
 If the GD module is not present, you can still use the module, but you
 will not be able to use its functions for generating images.  You can
@@ -97,7 +106,7 @@ package Barcode::Code128;
 
 use strict;
 
-use vars qw($GD_TYPE $VERSION %CODE_CHARS %CODE @ENCODING @EXPORT_OK
+use vars qw($GD_VERSION $VERSION %CODE_CHARS %CODE @ENCODING @EXPORT_OK
             %EXPORT_TAGS %FUNC_CHARS @ISA %OPTIONS);
 
 use constant CodeA  => chr(0xf4);
@@ -116,11 +125,11 @@ use constant Stop   => chr(0xff);
 use Carp;
 use Exporter;
 
-# Try to load GD.  If it succeeds, set $GD_TYPE accordingly.
+# Try to load GD.  If it succeeds, set $GD_VERSION accordingly.
 BEGIN {
-    $GD_TYPE = undef;
-    eval { require GD && GD->import() };
-    $GD_TYPE = ($GD::VERSION > 1.20 ? 'png' : 'gif')
+    $GD_VERSION = undef;
+    eval "use GD 2.18";
+    $GD_VERSION = $GD::VERSION
         unless $@;
 }
 
@@ -139,7 +148,7 @@ BEGIN {
      right_margin     => 0,
      padding          => 20,
      font_align       => 'left',
-     transparent_text => (defined $GD_TYPE && $GD_TYPE eq 'gif' ? 1 : 0),
+     transparent_text => 1,
     );
 
 @EXPORT_OK = qw(CodeA CodeB CodeC FNC1 FNC2 FNC3 FNC4 Shift StartA
@@ -148,7 +157,7 @@ BEGIN {
 @ISA = qw(Exporter);
 
 # Version information
-$VERSION = '2.01';
+$VERSION = '2.21';
 
 @ENCODING = qw(11011001100 11001101100 11001100110 10010011000
                10010001100 10001001100 10011001000 10011000100
@@ -346,7 +355,7 @@ Usage:
     $object->png($text, $x, $y)
     $object->png($text, { options... })
 
-    $object->gif($text)         # for old versions of GD only
+    $object->gif($text)
     $object->gif($text, $x, $y)
     $object->gif($text, { options... })
 
@@ -416,7 +425,7 @@ sub gd_image
     }
 
     croak "The gd_image() method of Barcode::Code128 requires the GD module"
-        unless $GD_TYPE;
+        unless $GD_VERSION;
 
     my $scale = $opts{scale};
     croak "Scale ($scale) must be a positive integer"
@@ -503,9 +512,7 @@ sub gif
 {
     my($self, $text, $x, $y, $scale) = @_;
     croak "The gif() method of Barcode::Code128 requires the GD module"
-        unless $GD_TYPE;
-    croak "The gif() method of Barcode::Code128 requires version less than 1.20 of GD"
-        unless defined  $GD_TYPE && $GD_TYPE eq 'gif';
+        unless $GD_VERSION;
     my $image = $self->gd_image($text, $x, $y, $scale);
     return $image->gif();
 }
@@ -514,9 +521,7 @@ sub png
 {
     my($self, $text, $x, $y, $scale) = @_;
     croak "The png() method of Barcode::Code128 requires the GD module"
-        unless $GD_TYPE;
-    croak "The png() method of Barcode::Code128 requires at least version 1.20 of GD"
-        unless defined  $GD_TYPE && $GD_TYPE eq 'png';
+        unless $GD_VERSION;
     my $image = $self->gd_image($text, $x, $y, $scale);
     return $image->png();
 }

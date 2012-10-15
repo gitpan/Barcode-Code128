@@ -45,7 +45,7 @@ EXAMPLE:
     print "Content-Type: image/png\n\n";
     $object->png('CODE 128');
 
-AUTHOR: William R. Ward, wrw@bayview.com
+AUTHOR: William R. Ward, wrw@cpan.org
 
 TERMS: This module is placed into the public domain.  You are free to
     use, modify, or redistribute this module in any way for commercial
@@ -56,17 +56,4 @@ TERMS: This module is placed into the public domain.  You are free to
     modified version of this module unless you change the name first.
 
 HISTORY:
-    Version 2.01, 17-Jul-2007 - Fix tests as reported in
-	    http://rt.cpan.org/Public/Bug/Display.html?id=14850
-
-    Version 2.0, 28-May-2001 - Generate either PNG or GIF, or neither,
-	    depending on what version of GD is installed; lots of
-	    optional parameters added; minor bug fixes
-
-    Version 1.11, 29-Oct-1999 - Fix bug in test script
-
-    Version 1.10, 26-Oct-1999 - Generate PNG instead of GIF files
-
-    Version 1.01, 19-Jul-1999 - Bug fix to deal with inputs ending in zero
-
-    Version 1.00, 8-Mar-1999 - Initial version.
+    See Changes file for history.
